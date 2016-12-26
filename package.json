@@ -1,0 +1,27 @@
+{
+  "name": "inessanchezbot",
+  "version": "1.0.0",
+  "description": "Bot de Ines Sanchez",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabygarro/InesSanchezBot.git"
+  },
+  "keywords": [
+    "ines",
+    "sanchez",
+    "bot"
+  ],
+  "author": "Gabriela Garro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabygarro/InesSanchezBot/issues"
+  },
+  "homepage": "https://github.com/gabygarro/InesSanchezBot#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "node-telegram-bot-api": "^0.25.0",
+    "telegram-node-bot": "^4.0.5"
+  }
+}
