@@ -5,7 +5,7 @@ var _ = require('lodash');
 module.exports = function (bot) {
 
     var name = "preguntar";
-    var description = "Hazme una pregunta";
+    var description = "Hazme una pregunta, soy una caracola mágica";
     var frases = [
         'Es cierto',
         'Si, es asi',
@@ -39,6 +39,9 @@ module.exports = function (bot) {
         var pregunta = msg.command.params[0] || null;
         if (pregunta != null) {
             bot.sendMessage(msg.chat.id, frases[_.random(frases.length - 1)]);
+            bot.sendMessage(msg.chat.id, "Probando funcionalidad de audios:");
+            bot.sendVoice(msg.chat.id, "./plugins/Voiceclips/yes.ogg", 
+                {reply_to_message_id: msg.message_id});
         }
         else {
             bot.sendMessage(msg.chat.id, 'Pero preguntame algo, que si tu no sabes la pregunta yo no se la respuesta. En caso de que no sepas la pregunta, la respuesta es 42');
