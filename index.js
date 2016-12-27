@@ -2,6 +2,9 @@
 
 // Bot setup
 var TelegramBot = require('node-telegram-bot-api'),
+    _ = require('lodash'),
+    utils = require('./utils'), 
+    path = require('path'),
     conf = require('./conf.json');
 var bot = new TelegramBot(conf.bot.token, conf.bot.opts);
 bot.plugins = [];
@@ -60,12 +63,34 @@ var reply = function (chatId) {
     }
 };
 
+var loadPlugin = function(pluginPath) {
+    var plugin = require(path.resolve(pluginPath))(bot, conf);
+
+    // Default match function
+    if(!plugin.match) {
+        plugin.match = function (msg) {
+            return msg.command.name === plugin.name;
+        };
+    }
+
+    bot.plugins.push(plugin);
+
+    return plugin;
+};
+
 /**
  *   MAIN
  **/
 // Print Bot Name
 bot.getMe().then(function (me) {
     console.log('Hi my name is %s!', me.username);
+});
+
+// Load Plugins
+console.log("Loading plugins...");
+utils.getGlobbedFiles('./plugins/**/*.js').forEach(function(pluginPath) {
+    var plugin = loadPlugin(pluginPath);
+    console.log(plugin.name + " loaded.");
 });
 
 // On message
@@ -75,8 +100,34 @@ bot.on('message', function (message) {
 	console.log(dt.toUTCString());
 	var entrante = "\t" + message.chat.username + ": " + message.text;
 	console.log(entrante);
-	var respuesta = "Hola mija/o";
-	console.log("\tYo: " + respuesta);
-	//Enviar respuesta
-	bot.sendMessage(message.chat.id, respuesta);
+
+    // Parse msg text
+    if (_.startsWith(message.text, '/')) { //es un comando
+        message.command = utils.parseCommand(message.text);
+
+        // Look for plugin
+        var foundPlugin = false;
+        _.forEach(bot.plugins, function(plugin, index) {
+            if(plugin.match(message)) {
+                foundPlugin = true;
+                console.log(plugin.name + " valid.");
+                plugin.exec(message, reply(message.chat.id));
+                    /*.catch(function(err) {
+                        console.log(err);
+                        bot.sendMessage(message.chat.id, "Error procesando su petición");
+                    });*/
+                return false;
+            }
+        });
+
+        if(!foundPlugin) {
+            console.log("No valid plugin found")
+        }
+    }
+    else {
+        //Enviar respuesta
+        var respuesta = "Hola mijo/a, ¿talvez te interesaría usar alguno de mis comandos?";
+        console.log("\tYo: " + respuesta);
+        bot.sendMessage(message.chat.id, respuesta);
+    }
 });
