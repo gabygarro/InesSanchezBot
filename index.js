@@ -2,10 +2,11 @@
 
 // Bot setup
 var TelegramBot = require('node-telegram-bot-api'),
-    _ = require('lodash'),
-    utils = require('./utils'), 
-    path = require('path'),
-    conf = require('./conf.json');
+_ = require('lodash'),
+utils = require('./utils'), 
+path = require('path'),
+conf = require('./conf.json');
+
 var bot = new TelegramBot(conf.bot.token, conf.bot.opts);
 bot.plugins = [];
 
@@ -105,6 +106,12 @@ bot.on('message', function (message) {
     if (_.startsWith(message.text, '/')) { //es un comando
         message.command = utils.parseCommand(message.text);
 
+        // Modificación para correr help cuando se hace /start
+        if (message.command.name == "start") {
+            message.text = "/help";
+            message.command = utils.parseCommand(message.text);
+        }
+
         // Look for plugin
         var foundPlugin = false;
         _.forEach(bot.plugins, function(plugin, index) {
@@ -121,12 +128,14 @@ bot.on('message', function (message) {
         });
 
         if(!foundPlugin) {
-            console.log("No valid plugin found")
+            console.log("No valid plugin found");
+            bot.sendMessage(message.chat.id, "No se encontró un plugin para ese comando.");
         }
     }
     else {
         //Enviar respuesta
-        var respuesta = "Hola mijo/a, ¿talvez te interesaría usar alguno de mis comandos?";
+        //var respuesta = "Hola mijo/a, ¿talvez te interesaría usar alguno de mis comandos?";
+        var respuesta = "Hola mijo/a, ahora estoy durmiendo.";
         console.log("\tYo: " + respuesta);
         bot.sendMessage(message.chat.id, respuesta);
     }
