@@ -5,7 +5,7 @@ var _ = require('lodash');
 module.exports = function (bot) {
 
     var name = "preguntar";
-    var description = "Hazme preguntas";
+    var description = "[mensaje] - Hazme preguntas";
     var frases = [
         'Es cierto',
         'Sí, es así',
@@ -27,28 +27,31 @@ module.exports = function (bot) {
         'Mis fuentes dicen que no',
         'No suena bien',
         'Lo dudo',
-        'No lo se, pero eso me recuerda que quiero un mojito',
+        'No lo sé, pero eso me recuerda que quiero un mojito',
         'Rézale a Dios'
     ];
 
     var exec = function (msg) {
         var pregunta = msg.command.params[0] || null;
         if (pregunta != null) {
-            if (_.random(2) < 0) {
-                bot.sendMessage(msg.chat.id, frases[_.random(frases.length - 1)], 
+            var respuesta = "";
+            if (_.random(2) > 0) {
+                respuesta = frases[_.random(frases.length - 1)];
+                bot.sendMessage(msg.chat.id, respuesta, 
                     { reply_to_message_id: msg.message_id});
             }
             else {
-                var archivo = "./plugins/Voiceclips/" + _.random(1,6) + ".ogg";
-                console.log(archivo);
-                bot.sendVoice(msg.chat.id, archivo, 
+                respuesta= "./plugins/Voiceclips/" + _.random(1,6) + ".ogg";
+                bot.sendVoice(msg.chat.id, respuesta, 
                     { reply_to_message_id: msg.message_id});
             }
         }
         else {
-            bot.sendMessage(msg.chat.id, 'No puedo responder si no me preguntas.', 
+            respuesta = "No puedo responder si no me preguntas.";
+            bot.sendMessage(msg.chat.id, respuesta, 
                 { reply_to_message_id: msg.message_id});
         }
+        console.log("\tYo: " + respuesta);
     };
 
     return {

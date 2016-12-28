@@ -96,18 +96,40 @@ utils.getGlobbedFiles('./plugins/**/*.js').forEach(function(pluginPath) {
 
 // On message
 bot.on('message', function (message) {
+    //Revisar si es un mensaje de un grupo o de una persona
+    var privado = true;
+    if (message.chat.type == 'group') {
+        privado = false;
+    }
+
 	// Registrar conversación a consola
 	var dt = new Date();
 	console.log(dt.toUTCString());
-	var entrante = "\t" + message.chat.username + ": " + message.text;
-	console.log(entrante);
+    if (privado) {
+        var entrante = "\t" + message.chat.username  + 
+            " (" + message.from.first_name + " " + message.from.last_name + " " +  message.from.id + "): " + message.text;
+        console.log(entrante);
+    }
+    else {
+        var entrante = "\t" + message.chat.title + " - " + message.from.username + 
+            " (" + message.from.first_name + " " + message.from.last_name + " " + message.from.id + "): " + message.text;
+        console.log(entrante);
+    }
+    ///console.log(message);
+
+    //Si la añadieron a un grupo
+    if (!privado && message.new_chat_member != undefined 
+        && message.new_chat_member.username == "InesSanchezBot") {
+        message.text = "/help";
+        var mensaje = "Hola, soy Inés Sánchez y es un honor para mí haber sido invitada a este grupo.\n"
+        bot.sendMessage(message.chat.id, mensaje);
+    }
 
     // Parse msg text
     if (_.startsWith(message.text, '/')) { //es un comando
-        message.command = utils.parseCommand(message.text);
-
         // Modificación para correr help cuando se hace /start
-        if (message.command.name == "start") {
+        message.command = utils.parseCommand(message.text);
+        if (privado && message.command.name == "start") {
             message.text = "/help";
             message.command = utils.parseCommand(message.text);
         }
@@ -117,7 +139,6 @@ bot.on('message', function (message) {
         _.forEach(bot.plugins, function(plugin, index) {
             if(plugin.match(message)) {
                 foundPlugin = true;
-                console.log(plugin.name + " valid.");
                 plugin.exec(message, reply(message.chat.id));
                     /*.catch(function(err) {
                         console.log(err);
@@ -128,13 +149,13 @@ bot.on('message', function (message) {
         });
 
         if(!foundPlugin) {
-            console.log("No valid plugin found");
-            bot.sendMessage(message.chat.id, "Lo siento mija/o, no sé qué hacer con ese comando.");
+            var respuesta = "Lo siento mija/o, no sé qué hacer con ese comando."
+            bot.sendMessage(message.chat.id, respuesta);
+            console.log("\tYo: " + respuesta);
         }
     }
     else {
         //Enviar respuesta
-        //var respuesta = "Hola mijo/a, ¿talvez te interesaría usar alguno de mis comandos?";
         var respuesta = "Hola mijo/a, mejor intenta con alguno de mis comandos en /help\n";
         console.log("\tYo: " + respuesta);
         bot.sendMessage(message.chat.id, respuesta);

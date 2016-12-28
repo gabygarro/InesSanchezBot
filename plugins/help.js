@@ -18,16 +18,15 @@ var _ = require('lodash');
 module.exports = function(bot) {
 
     var name = "help";
-    var description = "Texto de ayuda";
+    var description = "Ayuda";
 
     var exec = function(msg, reply) {
 
-        var response = "Hola, soy Inés Sánchez, nacida antes del acta de defunción del Mar Muerto.\n";
-        response += "Puedo hacer las siguientes cosas:\n\n";
+        var response = "Puedo hacer las siguientes cosas:\n\n";
 
         _.forEach(bot.plugins, function(plugin) {
             //response += plugin.help || ('/' + plugin.name + " - " + plugin.description);
-            response += '/' + plugin.name + " - " + plugin.description;
+            response += '/' + plugin.name + " " + plugin.description;
             response += "\n";
         });
 
