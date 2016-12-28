@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var utils = require('../lib/utils');
 
 module.exports = function (bot) {
 
@@ -11,10 +12,10 @@ module.exports = function (bot) {
         'Sí, es así',
         'Sin ninguna duda',
         'Definitivamente sí',
+        'Definitivamente no',
         'Puedes confiar en ello',
         'Tal y como lo veo, sí',
         'Lo más probable',
-        'Suena bien',
         'Sí',
         'Los signos apuntan a que sí',
         'No lo veo claro...',
@@ -25,11 +26,20 @@ module.exports = function (bot) {
         'No cuentes con ello',
         'Mi respuesta es no',
         'Mis fuentes dicen que no',
-        'No suena bien',
         'Lo dudo',
-        'No lo sé, pero eso me recuerda que quiero un mojito',
-        'Rézale a Dios'
+        'No lo sé, pero eso me recuerda a que quiero un mojito',
+        'Pregúntale a Dios',
+        'Más o menos',
+        'Puede ser',
+        'No creo',
+        'Sí, porque Buda me lo dijo',
+        'Fidel me obligaría a decir que no, pero ya falleció, así que sí'
     ];
+    var voiceMessages = [];
+    // Importar archivos de voz
+    utils.getGlobbedFiles('./plugins/Voiceclips/*.ogg').forEach(function(voicePath) {
+        voiceMessages.push(voicePath);
+    });
 
     var exec = function (msg) {
         var pregunta = msg.command.params[0] || null;
@@ -41,7 +51,7 @@ module.exports = function (bot) {
                     { reply_to_message_id: msg.message_id});
             }
             else {
-                respuesta= "./plugins/Voiceclips/" + _.random(1,6) + ".ogg";
+                respuesta = voiceMessages[_.random(voiceMessages.length - 1)];
                 bot.sendVoice(msg.chat.id, respuesta, 
                     { reply_to_message_id: msg.message_id});
             }

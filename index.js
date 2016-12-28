@@ -3,7 +3,7 @@
 // Bot setup
 var TelegramBot = require('node-telegram-bot-api'),
 _ = require('lodash'),
-utils = require('./utils'), 
+utils = require('./lib/utils'), 
 path = require('path'),
 conf = require('./conf.json');
 
