@@ -129,13 +129,13 @@ bot.on('message', function (message) {
 
         if(!foundPlugin) {
             console.log("No valid plugin found");
-            bot.sendMessage(message.chat.id, "No se encontró un plugin para ese comando.");
+            bot.sendMessage(message.chat.id, "Lo siento mija/o, no sé qué hacer con ese comando.");
         }
     }
     else {
         //Enviar respuesta
         //var respuesta = "Hola mijo/a, ¿talvez te interesaría usar alguno de mis comandos?";
-        var respuesta = "Hola mijo/a, ahora estoy durmiendo.";
+        var respuesta = "Hola mijo/a, mejor intenta con alguno de mis comandos en /help\n";
         console.log("\tYo: " + respuesta);
         bot.sendMessage(message.chat.id, respuesta);
     }
