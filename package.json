@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Bot de Ines Sanchez",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gabygarro/InesSanchezBot.git"
