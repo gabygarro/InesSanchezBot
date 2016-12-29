@@ -9,7 +9,7 @@ module.exports = function(bot) {
 
     var exec = function(msg, reply) {
         
-        reply.sendMessage("Creado por @GabyGarro\n\n[Proyecto en GitHub](https://github.com/gabygarro/InesSanchezBot)",
+        reply.sendMessage("Creado por @GabyGarro",
             {parse_mode: 'Markdown' });
     };
 

@@ -156,8 +156,10 @@ bot.on('message', function (message) {
     }
     else {
         //Enviar respuesta
-        var respuesta = "Hola mijo/a, mejor intenta con alguno de mis comandos en /help\n";
-        console.log("\tYo: " + respuesta);
-        bot.sendMessage(message.chat.id, respuesta);
+        if (message.text != undefined) {
+            var respuesta = "Hola mijo/a, mejor intenta con alguno de mis comandos en /help\n";
+            console.log("\tYo: " + respuesta);
+            bot.sendMessage(message.chat.id, respuesta);
+        } 
     }
 });
