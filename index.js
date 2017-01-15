@@ -110,12 +110,12 @@ bot.on('message', function (message) {
 	var dt = new Date();
 	var entrante = dt.toUTCString();
     if (privado) {
-        var entrante += "\t" + message.chat.username  + 
+        entrante += "\t" + message.chat.username  + 
             " (" + message.from.first_name + " " + message.from.last_name + " " +  message.from.id + "): " + message.text;
         console.log(entrante);
     }
     else {
-        var entrante += "\t" + message.chat.title + " - " + message.from.username + 
+        entrante += "\t" + message.chat.title + " - " + message.from.username + 
             " (" + message.from.first_name + " " + message.from.last_name + " " + message.from.id + "): " + message.text;
         console.log(entrante);
     }
