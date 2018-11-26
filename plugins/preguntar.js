@@ -57,7 +57,7 @@ module.exports = function (bot) {
             }
         }
         else {
-            respuesta = "No puedo responder si no me preguntas.";
+            respuesta = "No puedo responder si no me preguntas. Intenta dejando apretado el comando por un momento.";
             bot.sendMessage(msg.chat.id, respuesta, 
                 { reply_to_message_id: msg.message_id});
         }
