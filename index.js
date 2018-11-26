@@ -119,7 +119,7 @@ bot.on('message', function (message) {
             " (" + message.from.first_name + " " + message.from.last_name + " " + message.from.id + "): " + message.text;
         console.log(entrante);
     }
-    ///console.log(message);
+    //console.log(message);
     log += entrante + "\n";
 
     //Si la añadieron a un grupo

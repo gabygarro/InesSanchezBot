@@ -3,39 +3,32 @@
 var _ = require('lodash');
 var utils = require('../lib/utils');
 
+var fs = require('fs');
+var readline = require('readline');
+var stream = require('stream');
+
+function loadFile(filename, array) {
+    var instream = fs.createReadStream('./' + filename);
+    var outstream = new stream;
+    var rl = readline.createInterface(instream, outstream);
+
+    rl.on('line', function(line) {
+        array.push(line);
+    });
+}
+
 module.exports = function (bot) {
 
     var name = "preguntar";
     var description = "[mensaje] - Hazme preguntas";
-    var frases = [
-        'Es cierto',
-        'Sí, es así',
-        'Sin ninguna duda',
-        'Definitivamente sí',
-        'Definitivamente no',
-        'Puedes confiar en ello',
-        'Tal y como lo veo, sí',
-        'Lo más probable',
-        'Sí',
-        'Los signos apuntan a que sí',
-        'No lo veo claro...',
-        'Pregúntame luego',
-        'Mejor no te lo digo ahora',
-        'No puedo predecirlo',
-        'Concéntrate y pregunta de nuevo',
-        'No cuentes con ello',
-        'Mi respuesta es no',
-        'Mis fuentes dicen que no',
-        'Lo dudo',
-        'No lo sé, pero eso me recuerda a que quiero un mojito',
-        'Pregúntale a Dios',
-        'Más o menos',
-        'Puede ser',
-        'No creo',
-        'Sí, porque Buda me lo dijo',
-        'Fidel me obligaría a decir que no, pero ya falleció, así que sí'
-    ];
+    var frases = [];
+    var stickers = [];
     var voiceMessages = [];
+
+    // Cargar stickers y frases
+    loadFile('frases.txt', frases);
+    loadFile('stickers.txt', stickers);
+
     // Importar archivos de voz
     utils.getGlobbedFiles('./plugins/Voiceclips/*.ogg').forEach(function(voicePath) {
         voiceMessages.push(voicePath);
@@ -45,14 +38,18 @@ module.exports = function (bot) {
         var pregunta = msg.command.params[0] || null;
         if (pregunta != null) {
             var respuesta = "";
-            if (_.random(2) > 0) {
-                respuesta = frases[_.random(frases.length - 1)];
-                bot.sendMessage(msg.chat.id, respuesta, 
-                    { reply_to_message_id: msg.message_id});
-            }
-            else {
+            var probability = _.random(5);
+            if (probability == 5) {
                 respuesta = voiceMessages[_.random(voiceMessages.length - 1)];
                 bot.sendVoice(msg.chat.id, respuesta, 
+                    { reply_to_message_id: msg.message_id});
+            }
+            else if (probability >= 3) {
+                bot.sendSticker(msg.chat.id, stickers[_.random(stickers.length - 1)]);
+            }
+            else {
+                respuesta = frases[_.random(frases.length - 1)];
+                bot.sendMessage(msg.chat.id, respuesta, 
                     { reply_to_message_id: msg.message_id});
             }
         }
