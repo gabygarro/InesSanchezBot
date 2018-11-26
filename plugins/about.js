@@ -9,7 +9,7 @@ module.exports = function(bot) {
 
     var exec = function(msg, reply) {
         
-        reply.sendMessage("Creado por @GabyGarro",
+        reply.sendMessage("Creada por @hydrochaeris",
             {parse_mode: 'Markdown' });
     };
 
