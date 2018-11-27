@@ -1,3 +1,4 @@
+node_modules
 conf.json
 #Ignorar todos los archivos dentro del folder, pero no el folder en sí
 #plugins/Voiceclips/*
